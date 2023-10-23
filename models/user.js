@@ -1,0 +1,54 @@
+import mongoose from "mongoose";
+const { Schema } = mongoose;
+const { ObjectId } = Schema;
+
+const userSchema = new Schema(
+  {
+    name: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    email: {
+      type: String,
+      trim: true,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      min: 6,
+      max: 64,
+    },
+    picture: {
+      type: String,
+      default: "/avatar.png", 
+    },
+    role: {
+      type: [String],
+      default: ['Learner'],
+      enum: ['Learner', 'Instructor', 'Admin']
+    },
+    location: {
+      type: String,
+    },
+    stripe_account_id: "",
+    stripe_customer_id: String,
+    subscriptions: [],
+    stripe_seller: {},
+    stripeSession: {}, 
+    paystack_customer_id: String, 
+    paystack_customer: {},
+    paystackSession: {},
+    paystackSubscription: [],
+    passwordResetCode: { 
+      data: String,
+      default: "", 
+    },
+    courses: [{ type: ObjectId, ref: "Course" }],
+  },
+  { timestamps: true }
+);  
+ 
+export default mongoose.model("User", userSchema);
