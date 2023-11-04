@@ -247,20 +247,20 @@ export const updateLesson = async (req, res) => {
       { "lessons._id": _id },
       {
         $set: {
-          "lessons.$.title": title,
+          "lessons.$.title": title, 
           "lessons.$.content": content,
           "lessons.$.video": video,
-          "lessons.$.free_preview": free_preview,
+          "lessons.$.free_preview": free_preview, 
         },
       },
       { new: true }
     ).exec();
-    // console.log("updated", updated);
+    // console.log("updated", updated); 
     res.json({ ok: true });
   } catch (err) {
     console.log(err);
     return res.status(400).send("Update lesson failed");
-  }
+  } 
 };
 
 export const publishCourse = async (req, res) => {
@@ -313,20 +313,47 @@ export const courses = async (req, res) => {
     .exec();
   res.json(all);
 }; 
+
+
+
+export const pagination = async (req, res) => {
+  const all = await Course.find({ published: true })
+    .populate("instructor", "_id name location")
+    .exec();
+
+  const page=parseInt(req.query.page) 
+  const limit=parseInt(req.query.limit) 
+
+  const startIndex=(page-1)*limit
+  const lastIndex=(page)*limit 
+
+  const results = {} 
+  results.totalCourses = all.length;
+  results.pageCount = Math.ceil(all.length / limit)
+
+  if(lastIndex < all.length) {
+    results.next={
+      page:page+1,
+    }
+  }
+
+  if(startIndex > 0) { 
+    results.prev={
+      page:page-1,
+    } 
+  }   
+
+  results.result = all.slice(startIndex,lastIndex) 
+  res.json(results);
+}; 
+
+  
+// export const pagination = async(req, res) => {
+//   res.json("paginated")
+// }
  
 
-// export const courses = async (req, res) => {
-//   const page = parseInt(req.query.page) || 1;
-//   const perPage = parseInt(req.query.perPage) || 3;
 
-//   const courses = await Course.find({ published: true })
-//     .skip((page - 1) * perPage)
-//     .limit(perPage)
-//     .populate("instructor", "_id name location")
-//     .exec();
-
-//   res.json(courses);
-// }; 
 
 
 

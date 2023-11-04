@@ -30,7 +30,8 @@ import {
   listCompleted,
   markIncomplete,
   uploadEbook,
-  saveEbook
+  saveEbook,
+  pagination
   
 } from "../controllers/course"; 
 
@@ -91,7 +92,8 @@ router.post(
   saveEbook 
 );
 
-
+// PAGINATION 
+router.get("/pagination", pagination)
 
  
 

@@ -13,7 +13,7 @@ const awsConfig = {
   region: process.env.AWS_REGION,
   apiVersion: process.env.AWS_API_VERSION,
 };
- 
+    
 const SES = new AWS.SES(awsConfig);
 
 export const register = async(req, res)=>{
